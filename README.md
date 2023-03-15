@@ -55,7 +55,7 @@ Modify `package.json` file and add the following line to `scripts`:
 </code>
 <br/><br/>
 
-Create a api in `users.js` which should demonstrate slowness.<br/>
+Create an api in `users.js` which should demonstrate slowness.<br/>
 ```
 router.get('/slow', function(req, res, next) {
   setTimeout(() => {
@@ -65,6 +65,11 @@ router.get('/slow', function(req, res, next) {
 ```
 
 Now you can run: `npm run start.dev` to test the results at url: `http://localhost:3000/metrics`
+<br></br>
+<b>Lets trigger 2 Http requests to generate some metrics</b><br></br>
+`http://localhost:3000/users` and `http://localhost:3000/users/slow` (to simulate slowness)
+
+And check `http://localhost:3000/metrics` if we can see the new metrics.
 
 <br/>
 
