@@ -57,11 +57,11 @@ Modify `package.json` file and add the following line to `scripts`:
 
 Create a api in `users.js` which should demonstrate slowness.<br/>
 ```
-router.get('/slow', function(req, res, next) {<br/>
-  setTimeout(() => {<br/>
-    res.send('Slowly respond with a resource');<br/>
-  }, 3000); <br/>
-});<br/>
+router.get('/slow', function(req, res, next) {
+  setTimeout(() => {
+    res.send('Slowly respond with a resource');
+  }, 3000); 
+});
 ```
 
 Now you can run: `npm run start.dev` to test the results at url: `http://localhost:3000/metrics`
@@ -111,15 +111,19 @@ groups:
 <br></br>
 Contents of `/prometheus/prometheus.yml`<br/>
 ```
-groups:
-  - name: DemoAlerts
-    rules:
-      - alert: "On api down"
-        expr: up{job="api"} < 1
-        for: 30s
-      - alert: "API Slow"
-        expr: http_request_duration_seconds_sum{job="api", path="/users/slow"} > 2
-        for: 20s
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+
+rule_files:
+  - alert.yml
+
+scrape_configs:
+  - job_name: "api"
+    static_configs:
+      - targets: ["api:5000"]
+
 ```
 <b>Create docker compose file</b><br/>
 `docker-compose.yml` file with the following contents:
